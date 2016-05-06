@@ -3,7 +3,6 @@
 import base64
 from gdata.tlslite.utils import keyfactory
 import oauth2 as oauth
-import array
 
 
 def build_request(base_url, parameters, consumer_key, consumer_priv_key, method='GET'):
@@ -68,17 +67,3 @@ class SignatureMethod_RSA_SHA1(oauth.SignatureMethod):
         sig = privatekey.hashAndSign(raw)
 
         return base64.b64encode(sig)
-
-    def check(self, request, consumer, token, signature):
-        """
-        Returns whether the given signature is the correct signature for
-        the given consumer and token signing the given request.
-        """
-
-        publickey = keyfactory.parseAsPublicKey(self.kpub)
-
-        key, raw = self.signing_base(request, consumer, token)
-        sig = base64.b64decode(signature)
-
-
-        return publickey.hashAndVerify(array.array('B', sig), raw)
