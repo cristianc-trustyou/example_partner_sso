@@ -1,10 +1,9 @@
 import getopt
 import sys
-import time
-import oauth_utils
 
 from key_store import get_private_key
-from gdata import oauth as gdata_oauth
+from oauthlib import oauth1
+from urllib import urlencode
 
 HRS_REGISTER_PATH = "api/register/"
 
@@ -28,8 +27,6 @@ def generate_signed_registration_request(hotel_id, user_name, consumer_id, host_
 
         params = {}
         params["hotel_id"] = hotel_id
-        params["oauth_nonce"] = gdata_oauth.generate_nonce()
-        params["oauth_timestamp"] = int(time.time())
         params["oauth_token"] = user_name
 
         target_url = host_url
@@ -46,9 +43,19 @@ def generate_signed_registration_request(hotel_id, user_name, consumer_id, host_
         register_base_url = target_url + HRS_REGISTER_PATH
 
         consumer_key = _get_priv_key(consumer_id)
-        request = oauth_utils.build_request(register_base_url, params,
-                                            consumer_id, consumer_key)
-        return request.to_url()
+
+        client = oauth1.Client(
+            client_key=consumer_id,
+            signature_method=oauth1.SIGNATURE_RSA,
+            rsa_key=consumer_key,
+            signature_type=oauth1.SIGNATURE_TYPE_QUERY
+        )
+
+        unsigned_url = register_base_url + '?' + urlencode(params)
+
+        url, headers, body = client.sign(unsigned_url)
+
+        return url
 
 
 def _get_option(name, opts_dict):
