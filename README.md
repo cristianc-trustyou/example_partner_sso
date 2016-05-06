@@ -76,8 +76,9 @@ $ pip install -r requirements.txt
 
 Expected SSH keys in the "key_store" folder:
 
- * priv_<consumer_id>.pem: private key of consumer, needed for the signed url generation
- * pub_<consumer_id>.pem: public key of consumer, needed for the signed url verification, not used by the example
+ * priv_consumer_id.pem: private key of consumer, needed for the signed url generation
+ * pub_consumer_id.pem: public key of consumer, needed for the signed url verification, not used by the example
+ * replace "consumer_id" part with the actual consumer id
 
 <br/><br/>
 
