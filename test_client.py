@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     opts, args = getopt.getopt(
         sys.argv[1:], "", [
-            "consumer_id=", "host_url=", "hotel_id=", "user_name=", "default_partner_tile_idx=", "lang="
+            "consumer_id=", "host_url=", "hotel_id=", "user_name=", "default_partner_tile_idx=", "lang=", "scale="
         ]
     )
 
@@ -85,13 +85,14 @@ if __name__ == "__main__":
     user_name = _get_option("user_name", opts_dict)
     default_partner_tile_idx = _get_option("default_partner_tile_idx", opts_dict)
     lang = _get_option("lang", opts_dict)
+    scale = _get_option("scale", opts_dict)
 
     signed_url = generate_signed_registration_request(
         hotel_id,
         user_name,
         consumer_id,
         host_url,
-        scale="",
+        scale=scale,
         lang=lang,
         default_partner_tile_idx=default_partner_tile_idx
     )
